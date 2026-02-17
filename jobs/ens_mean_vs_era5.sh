@@ -48,8 +48,8 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --lead_time_frequency=6 \
     --output_dir=./results \
     --lead_time_chunk_size=4 \
-    --init_time_chunk_size=1 
-    # --runner=DirectRunner \
+    --init_time_chunk_size=1 \
+    --runner=FlinkRunner
     # -- \
     # --direct_running_mode=in_memory \
     # --direct_num_workers=0
