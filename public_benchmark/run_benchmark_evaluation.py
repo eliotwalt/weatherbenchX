@@ -49,10 +49,8 @@ import importlib
 import os
 from absl import app
 from absl import flags
-import apache_beam as beam
 import numpy as np
 from weatherbenchX import aggregation
-from weatherbenchX import beam_pipeline
 from weatherbenchX import binning
 from weatherbenchX import time_chunks
 from weatherbenchX import weighting
@@ -103,6 +101,13 @@ TEMPORAL = flags.DEFINE_bool(
     'temporal', False, 'If true, do not reduce over init time.'
 )
 RUNNER = flags.DEFINE_string('runner', None, 'beam.runners.Runner')
+BACKEND = flags.DEFINE_enum(
+    'backend', 'beam', ['beam', 'dask'],
+    'Processing backend: "beam" for Apache Beam, "dask" for pure dask/xarray.'
+)
+N_WORKERS = flags.DEFINE_integer(
+    'n_workers', 1, 'Number of dask workers (only used with --backend=dask).'
+)
 
 
 _DEFAULT_LEVELS = [500, 700, 850]
@@ -385,16 +390,30 @@ def main(argv: Sequence[str]) -> None:
   out_path = os.path.join(OUTPUT_DIR.value, filename)
   print(f'Save path: {out_path}')
 
-  with beam.Pipeline(runner=RUNNER.value, argv=argv) as root:
-    beam_pipeline.define_pipeline(
-        root,
+  if BACKEND.value == 'dask':
+    from weatherbenchX import dask_pipeline
+    dask_pipeline.run_pipeline(
         times,
         prediction_loader,
         target_loader,
         all_metrics,
         aggregation_method,
         out_path=out_path,
+        n_workers=N_WORKERS.value,
     )
+  else:
+    import apache_beam as beam
+    from weatherbenchX import beam_pipeline
+    with beam.Pipeline(runner=RUNNER.value, argv=argv) as root:
+      beam_pipeline.define_pipeline(
+          root,
+          times,
+          prediction_loader,
+          target_loader,
+          all_metrics,
+          aggregation_method,
+          out_path=out_path,
+      )
 
 
 if __name__ == '__main__':

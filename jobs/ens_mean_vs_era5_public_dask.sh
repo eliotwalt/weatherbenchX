@@ -36,7 +36,7 @@ export NUMEXPR_NUM_THREADS=1
 # Run WeatherBenchX evaluation (dask)
 # ================================
 
-python xaurora_benchmark/run_benchmark_evaluation_dask.py \
+python public_benchmark/run_benchmark_evaluation.py \
     --config=public_configs \
     --prediction=ens_mean \
     --target=era5 \
@@ -50,4 +50,5 @@ python xaurora_benchmark/run_benchmark_evaluation_dask.py \
     --output_dir=./results \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=1 \
+    --backend=dask \
     --n_workers=$((SLURM_CPUS_PER_TASK/2))
