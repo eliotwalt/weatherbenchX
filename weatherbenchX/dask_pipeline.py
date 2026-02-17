@@ -129,6 +129,31 @@ def _process_chunk(
   return aggregation_state
 
 
+def _process_chunk_with_refs(
+    chunk_index: int,
+    init_times: np.ndarray,
+    lead_times: np.ndarray,
+    predictions_loader: data_loaders_base.DataLoader,
+    targets_loader: data_loaders_base.DataLoader,
+    metrics: Mapping[str, metrics_base.Metric],
+    aggregator: aggregation.Aggregator,
+) -> aggregation.AggregationState:
+  """Process a single time chunk using scattered references.
+
+  This is a wrapper that accepts the scattered objects and calls _process_chunk.
+  The scattered objects are automatically resolved by dask.distributed.
+  """
+  return _process_chunk(
+      chunk_index,
+      init_times,
+      lead_times,
+      predictions_loader,
+      targets_loader,
+      metrics,
+      aggregator,
+  )
+
+
 def run_pipeline(
     times: time_chunks.TimeChunks,
     predictions_loader: data_loaders_base.DataLoader,
@@ -212,29 +237,35 @@ def run_pipeline(
     try:
       logging.info(f'Dask dashboard available at: {client.dashboard_link}')
 
-      # Create delayed tasks for all chunks
-      @dask.delayed
-      def delayed_process_chunk(chunk_idx, init_chunk, lead_chunk):
-        return _process_chunk(
-            chunk_idx,
-            init_chunk,
-            lead_chunk,
-            predictions_loader,
-            targets_loader,
-            metrics,
-            aggregator,
-        )
+      # Scatter large objects to workers ONCE (broadcast=True sends to all workers)
+      # This avoids serializing them repeatedly for each task
+      logging.info('Broadcasting data loaders and metrics to workers...')
+      [pred_loader_fut, tgt_loader_fut, metrics_fut, agg_fut] = client.scatter(
+          [predictions_loader, targets_loader, metrics, aggregator],
+          broadcast=True,
+      )
+      logging.info('Broadcast complete.')
 
-      delayed_results = [
-          delayed_process_chunk(i, init_chunk, lead_chunk)
+      # Submit tasks using the scattered futures
+      # This way each task references the pre-distributed objects instead of
+      # embedding them in the task graph
+      logging.info(f'Submitting {n_chunks} tasks to cluster...')
+      futures = [
+          client.submit(
+              _process_chunk_with_refs,
+              i,
+              init_chunk,
+              lead_chunk,
+              pred_loader_fut,
+              tgt_loader_fut,
+              metrics_fut,
+              agg_fut,
+              pure=False,  # Tasks have side effects (logging, progress counter)
+          )
           for i, (init_chunk, lead_chunk) in enumerate(chunks)
       ]
 
-      # Compute all chunks in parallel
-      logging.info(f'Submitting {len(delayed_results)} tasks to cluster...')
-
-      # Use client.compute for distributed execution
-      futures = client.compute(delayed_results)
+      # Gather results
       aggregation_states = client.gather(futures)
 
     finally:
