@@ -21,7 +21,6 @@ set -u
 
 echo "Running on node: $SLURMD_NODENAME"
 echo "Allocated CPUs: $SLURM_CPUS_PER_TASK"
-echo "direct_num_workers: $((SLURM_CPUS_PER_TASK/2))"
 
 # Activate virtual environment
 source env/venv/bin/activate
@@ -51,4 +50,4 @@ python public_benchmark/run_benchmark_evaluation.py \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=1 \
     --backend=dask \
-    --n_workers=$((SLURM_CPUS_PER_TASK/2))
+    --n_workers=SLURM_CPUS_PER_TASK

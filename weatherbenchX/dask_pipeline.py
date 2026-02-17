@@ -86,17 +86,20 @@ def _process_chunk(
   chunk_start = time.time()
 
   # Load targets and predictions for this chunk
+  logging.info(f'Loading chunk {chunk_index} (init_times: {init_times}, lead_times: {lead_times})...')
   targets_chunk = targets_loader.load_chunk(init_times, lead_times)
   predictions_chunk = predictions_loader.load_chunk(
       init_times, lead_times, targets_chunk
   )
 
   # Compute statistics
+  logging.info(f'Computing statistics for chunk {chunk_index}...')
   statistics = metrics_base.compute_unique_statistics_for_all_metrics(
       metrics, predictions_chunk, targets_chunk
   )
 
   # Aggregate statistics
+  logging.info(f'Aggregating statistics for chunk {chunk_index}...')
   aggregation_state = aggregator.aggregate_statistics(statistics)
 
   # Log progress
