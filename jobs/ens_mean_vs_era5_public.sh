@@ -40,11 +40,11 @@ python public_benchmark/run_benchmark_evaluation.py \
     --prediction=ens_mean \
     --target=era5 \
     --resolution=1440x721 \
-    --time_start=2021-01-01 \
-    --time_stop=2021-12-31 \
-    --year=2021 \
+    --time_start=2020-01-01 \
+    --time_stop=2020-12-31 \
+    --year=2020 \
     --lead_time_start=6 \
-    --lead_time_stop=3000 \
+    --lead_time_stop=366 \
     --lead_time_frequency=6 \
     --output_dir=./results \
     --lead_time_chunk_size=4 \
