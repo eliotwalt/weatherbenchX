@@ -24,7 +24,6 @@ from typing import Callable, Mapping, Optional
 
 from absl import logging
 import dask
-from dask.diagnostics import ProgressBar
 import numpy as np
 from weatherbenchX import aggregation
 from weatherbenchX import time_chunks
@@ -140,12 +139,13 @@ def run_pipeline(
     aggregation_state_out_path: str | None = None,
     setup_fn: Optional[Callable[[], None]] = None,
     n_workers: int = 1,
+    threads_per_worker: int = 1,
     show_progress: bool = True,
 ) -> xr.Dataset | None:
   """Runs the dask pipeline for calculating aggregated metrics.
 
   This function provides the same functionality as beam_pipeline.define_pipeline
-  but uses dask for parallel processing instead of Apache Beam.
+  but uses dask distributed LocalCluster for parallel processing.
 
   Args:
     times: TimeChunks instance defining the chunks to process.
@@ -158,8 +158,12 @@ def run_pipeline(
       state to. This can be useful if you want to compute further metrics from
       it later.
     setup_fn: (Optional) A function to call once before processing starts.
-    n_workers: Number of dask workers for parallel processing.
-    show_progress: Whether to show a progress bar during processing.
+    n_workers: Number of dask workers (processes) for parallel processing.
+      For I/O-bound workloads, fewer workers with more threads is often better.
+    threads_per_worker: Number of threads per worker. For I/O-bound workloads
+      like loading from cloud storage, higher values (4-8) can improve
+      throughput.
+    show_progress: Whether to show progress information during processing.
 
   Returns:
     The computed metrics as an xarray Dataset, or None if no out_path is
@@ -188,39 +192,55 @@ def run_pipeline(
   _progress_counter = _ProgressCounter(n_chunks)
 
   if n_workers > 1:
-    # Parallel processing with dask.delayed
-    @dask.delayed
-    def delayed_process_chunk(chunk_idx, init_chunk, lead_chunk):
-      return _process_chunk(
-          chunk_idx,
-          init_chunk,
-          lead_chunk,
-          predictions_loader,
-          targets_loader,
-          metrics,
-          aggregator,
-      )
+    # Use dask.distributed LocalCluster for better resource management
+    from dask.distributed import Client, LocalCluster
 
-    # Create delayed tasks for all chunks
-    delayed_results = [
-        delayed_process_chunk(i, init_chunk, lead_chunk)
-        for i, (init_chunk, lead_chunk) in enumerate(chunks)
-    ]
-
-    # Compute all chunks in parallel
+    total_threads = n_workers * threads_per_worker
     logging.info(
-        f'Computing {len(delayed_results)} chunks with {n_workers} workers...'
+        f'Starting LocalCluster with {n_workers} workers, '
+        f'{threads_per_worker} threads/worker ({total_threads} total threads)...'
     )
-    context_managers = []
-    if show_progress:
-      context_managers.append(ProgressBar())
 
-    with dask.config.set(num_workers=n_workers):
-      if show_progress:
-        with ProgressBar():
-          aggregation_states = dask.compute(*delayed_results)
-      else:
-        aggregation_states = dask.compute(*delayed_results)
+    cluster = LocalCluster(
+        n_workers=n_workers,
+        threads_per_worker=threads_per_worker,
+        processes=True,  # Use processes for better parallelism with GIL
+        memory_limit='auto',
+    )
+    client = Client(cluster)
+
+    try:
+      logging.info(f'Dask dashboard available at: {client.dashboard_link}')
+
+      # Create delayed tasks for all chunks
+      @dask.delayed
+      def delayed_process_chunk(chunk_idx, init_chunk, lead_chunk):
+        return _process_chunk(
+            chunk_idx,
+            init_chunk,
+            lead_chunk,
+            predictions_loader,
+            targets_loader,
+            metrics,
+            aggregator,
+        )
+
+      delayed_results = [
+          delayed_process_chunk(i, init_chunk, lead_chunk)
+          for i, (init_chunk, lead_chunk) in enumerate(chunks)
+      ]
+
+      # Compute all chunks in parallel
+      logging.info(f'Submitting {len(delayed_results)} tasks to cluster...')
+
+      # Use client.compute for distributed execution
+      futures = client.compute(delayed_results)
+      aggregation_states = client.gather(futures)
+
+    finally:
+      client.close()
+      cluster.close()
+      logging.info('Cluster shut down.')
   else:
     # Sequential processing
     aggregation_states = []

@@ -35,6 +35,11 @@ export NUMEXPR_NUM_THREADS=1
 # Run WeatherBenchX evaluation (dask)
 # ================================
 
+# For I/O-bound workloads, use fewer workers with more threads per worker
+# 24 workers × 8 threads = 192 total threads
+THREADS_PER_WORKER=8
+N_WORKERS=$((SLURM_CPUS_PER_TASK / THREADS_PER_WORKER))
+
 python public_benchmark/run_benchmark_evaluation.py \
     --config=public_configs \
     --prediction=ens_mean \
@@ -50,4 +55,5 @@ python public_benchmark/run_benchmark_evaluation.py \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=1 \
     --backend=dask \
-    --n_workers=$SLURM_CPUS_PER_TASK
+    --n_workers=$N_WORKERS \
+    --threads_per_worker=$THREADS_PER_WORKER

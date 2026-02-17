@@ -106,7 +106,14 @@ BACKEND = flags.DEFINE_enum(
     'Processing backend: "beam" for Apache Beam, "dask" for pure dask/xarray.'
 )
 N_WORKERS = flags.DEFINE_integer(
-    'n_workers', 1, 'Number of dask workers (only used with --backend=dask).'
+    'n_workers', 1,
+    'Number of dask workers/processes (only used with --backend=dask). '
+    'For I/O-bound workloads, fewer workers with more threads is often better.'
+)
+THREADS_PER_WORKER = flags.DEFINE_integer(
+    'threads_per_worker', 1,
+    'Number of threads per dask worker (only used with --backend=dask). '
+    'For I/O-bound workloads like cloud storage, try 4-8 threads per worker.'
 )
 
 
@@ -400,6 +407,7 @@ def main(argv: Sequence[str]) -> None:
         aggregation_method,
         out_path=out_path,
         n_workers=N_WORKERS.value,
+        threads_per_worker=THREADS_PER_WORKER.value,
     )
   else:
     import apache_beam as beam
