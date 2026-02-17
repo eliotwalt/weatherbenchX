@@ -7,7 +7,8 @@
 #SBATCH --partition=fat_genoa
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=92
+#SBATCH --cpus-per-task=192
+#SBATCH --exclusive
 #SBATCH --time=120:00:00
 #SBATCH --output=logs/%j.out
 #SBATCH --error=logs/%j.out
