@@ -18,6 +18,8 @@ pipeline, serving as an alternative to the Apache Beam-based pipeline.
 """
 
 import os
+import threading
+import time
 from typing import Callable, Mapping, Optional
 
 from absl import logging
@@ -31,7 +33,34 @@ from weatherbenchX.metrics import base as metrics_base
 import xarray as xr
 
 
+# Thread-safe counter for tracking progress
+class _ProgressCounter:
+  """Thread-safe counter for tracking chunk processing progress."""
+
+  def __init__(self, total: int):
+    self._count = 0
+    self._total = total
+    self._lock = threading.Lock()
+    self._start_time = time.time()
+
+  def increment(self) -> tuple[int, float]:
+    """Increment counter and return (current_count, elapsed_seconds)."""
+    with self._lock:
+      self._count += 1
+      elapsed = time.time() - self._start_time
+      return self._count, elapsed
+
+  @property
+  def total(self) -> int:
+    return self._total
+
+
+# Global counter for current pipeline run
+_progress_counter: Optional[_ProgressCounter] = None
+
+
 def _process_chunk(
+    chunk_index: int,
     init_times: np.ndarray,
     lead_times: np.ndarray,
     predictions_loader: data_loaders_base.DataLoader,
@@ -42,6 +71,7 @@ def _process_chunk(
   """Process a single time chunk and return aggregated statistics.
 
   Args:
+    chunk_index: Index of this chunk (for logging).
     init_times: Array of initialization times for this chunk.
     lead_times: Array of lead times for this chunk.
     predictions_loader: DataLoader for predictions.
@@ -52,13 +82,8 @@ def _process_chunk(
   Returns:
     AggregationState containing aggregated statistics for this chunk.
   """
-  logging.log_first_n(
-      logging.INFO,
-      'Processing chunk: init_times=%s, lead_times=%s',
-      10,
-      init_times,
-      lead_times,
-  )
+  global _progress_counter
+  chunk_start = time.time()
 
   # Load targets and predictions for this chunk
   targets_chunk = targets_loader.load_chunk(init_times, lead_times)
@@ -73,6 +98,31 @@ def _process_chunk(
 
   # Aggregate statistics
   aggregation_state = aggregator.aggregate_statistics(statistics)
+
+  # Log progress
+  chunk_time = time.time() - chunk_start
+  if _progress_counter is not None:
+    completed, elapsed = _progress_counter.increment()
+    total = _progress_counter.total
+    pct = 100.0 * completed / total
+    rate = completed / elapsed if elapsed > 0 else 0
+    eta = (total - completed) / rate if rate > 0 else float('inf')
+    eta_str = f'{eta:.1f}s' if eta < float('inf') else 'N/A'
+    # Log every 1% or at least every 100 chunks
+    log_interval = max(1, total // 100)
+    if completed % log_interval == 0 or completed == total:
+      logging.info(
+          f'Progress: {completed}/{total} ({pct:.1f}%) | '
+          f'Chunk time: {chunk_time:.1f}s | '
+          f'Rate: {rate:.2f} chunks/s | '
+          f'ETA: {eta_str}'
+      )
+  else:
+    logging.log_first_n(
+        logging.INFO,
+        f'Chunk {chunk_index} completed in {chunk_time:.1f}s',
+        10,
+    )
 
   return aggregation_state
 
@@ -130,11 +180,16 @@ def run_pipeline(
   n_chunks = len(chunks)
   logging.info(f'Processing {n_chunks} chunks...')
 
+  # Initialize progress counter
+  global _progress_counter
+  _progress_counter = _ProgressCounter(n_chunks)
+
   if n_workers > 1:
     # Parallel processing with dask.delayed
     @dask.delayed
-    def delayed_process_chunk(init_chunk, lead_chunk):
+    def delayed_process_chunk(chunk_idx, init_chunk, lead_chunk):
       return _process_chunk(
+          chunk_idx,
           init_chunk,
           lead_chunk,
           predictions_loader,
@@ -145,8 +200,8 @@ def run_pipeline(
 
     # Create delayed tasks for all chunks
     delayed_results = [
-        delayed_process_chunk(init_chunk, lead_chunk)
-        for init_chunk, lead_chunk in chunks
+        delayed_process_chunk(i, init_chunk, lead_chunk)
+        for i, (init_chunk, lead_chunk) in enumerate(chunks)
     ]
 
     # Compute all chunks in parallel
@@ -167,9 +222,8 @@ def run_pipeline(
     # Sequential processing
     aggregation_states = []
     for i, (init_chunk, lead_chunk) in enumerate(chunks):
-      if show_progress:
-        logging.info(f'Processing chunk {i + 1}/{n_chunks}...')
       agg_state = _process_chunk(
+          i,
           init_chunk,
           lead_chunk,
           predictions_loader,
@@ -178,6 +232,9 @@ def run_pipeline(
           aggregator,
       )
       aggregation_states.append(agg_state)
+
+  # Reset progress counter
+  _progress_counter = None
 
   # Combine all aggregation states
   logging.info('Combining aggregation states...')
