@@ -50,4 +50,4 @@ python public_benchmark/run_benchmark_evaluation.py \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=1 \
     --backend=dask \
-    --n_workers=SLURM_CPUS_PER_TASK
+    --n_workers=$SLURM_CPUS_PER_TASK
