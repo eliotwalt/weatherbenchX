@@ -35,8 +35,8 @@ export NUMEXPR_NUM_THREADS=1
 # Run WeatherBenchX evaluation
 # ================================
 
-python public_benchmark/run_benchmark_evaluation.py \
-    --config=public_configs \
+python xaurora_benchmark/run_benchmark_evaluation.py \
+    --config=xaurora_configs \
     --prediction=ens_mean \
     --target=era5 \
     --resolution=1440x721 \
