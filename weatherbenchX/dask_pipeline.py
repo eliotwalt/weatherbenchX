@@ -206,6 +206,12 @@ def run_pipeline(
   # Call setup function if provided
   if setup_fn is not None:
     setup_fn()
+    
+  # Pre-load datasets 
+  if predictions_loader._ds is None:
+    predictions_loader.maybe_prepare_dataset()
+  if targets_loader._ds is None:
+    targets_loader.maybe_prepare_dataset()
 
   # Generate all chunks as a list
   chunks = list(times)

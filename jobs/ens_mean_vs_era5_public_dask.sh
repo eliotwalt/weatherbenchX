@@ -51,8 +51,8 @@ python public_benchmark/run_benchmark_evaluation.py \
     --lead_time_stop=366 \
     --lead_time_frequency=6 \
     --output_dir=./results \
-    --lead_time_chunk_size=4 \
-    --init_time_chunk_size=1 \
+    --lead_time_chunk_size=12 \
+    --init_time_chunk_size=4 \
     --backend=dask \
     --n_workers=1 \
     --threads_per_worker=1
