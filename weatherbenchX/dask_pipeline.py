@@ -242,48 +242,8 @@ def run_pipeline(
 
     try:
       logging.info(f'Dask dashboard available at: {client.dashboard_link}')
-
-      # Wait for workers to be ready before scattering
-      logging.info(f'Waiting for {n_workers} workers to be ready...')
-      client.wait_for_workers(n_workers, timeout=120)
-      logging.info(f'All {n_workers} workers ready.')
-
-      # # Scatter large objects to workers ONCE
-      # # Use direct=True to bypass the scheduler and send directly to workers,
-      # # which avoids blocking the scheduler's event loop during serialization
-      # # Use hash=False to skip computing hashes (faster for large objects)
-      # logging.info('Broadcasting data loaders and metrics to workers...')
-      # [pred_loader_fut, tgt_loader_fut, metrics_fut, agg_fut] = client.scatter(
-      #     [predictions_loader, targets_loader, metrics, aggregator],
-      #     broadcast=True,
-      #     direct=True,
-      #     hash=False,
-      # )
-      # logging.info('Broadcast complete.')
-
-      # # Submit tasks using the scattered futures
-      # # This way each task references the pre-distributed objects instead of
-      # # embedding them in the task graph
-      # logging.info(f'Submitting {n_chunks} tasks to cluster...')
-      # futures = [
-      #     client.submit(
-      #         _process_chunk_with_refs,
-      #         i,
-      #         init_chunk,
-      #         lead_chunk,
-      #         pred_loader_fut,
-      #         tgt_loader_fut,
-      #         metrics_fut,
-      #         agg_fut,
-      #         pure=False,  # Tasks have side effects (logging, progress counter)
-      #     )
-      #     for i, (init_chunk, lead_chunk) in enumerate(chunks)
-      # ]
-
-      # # Gather results
-      # aggregation_states = client.gather(futures)
       
-      # Alternative: create delayed tasks that reference the global variables (which are automatically resolved on workers) instead of scattering explicitly. This is simpler and often works well for moderately large objects
+      # create delayed tasks that reference the global variables (which are automatically resolved on workers) instead of scattering explicitly. This is simpler and often works well for moderately large objects
       logging.info(f'Creating delayed tasks for {n_chunks} chunks...')
       delayed_tasks = [
           dask.delayed(_process_chunk_with_refs)(
@@ -294,7 +254,7 @@ def run_pipeline(
               targets_loader,
               metrics,
               aggregator,
-          )          
+          )
           for i, (init_chunk, lead_chunk) in enumerate(chunks)
       ]
       logging.info('Computing delayed tasks...')

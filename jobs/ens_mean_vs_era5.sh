@@ -51,6 +51,5 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --init_time_chunk_size=1 \
     --runner=DirectRunner \
     -- \
-    --direct_running_mode=multi_processing \
-    --direct_num_workers=1 \
-    --sdk_worker_parallelism=1
+    --direct_running_mode=in_memory \
+    --direct_num_workers=0
