@@ -48,7 +48,7 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --lead_time_frequency=6 \
     --output_dir=/projects/prjs1808/ewalt1/Xaurora/train/16g/2026-01-23_10-18-59/wbx_benchmark/ \
     --lead_time_chunk_size=12 \
-    --init_time_chunk_size=16 \
+    --init_time_chunk_size=2 \
     --runner=DirectRunner \
     -- \
     --direct_running_mode=multi_processing \

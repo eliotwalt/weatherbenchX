@@ -49,6 +49,7 @@ import importlib
 import os
 from absl import app
 from absl import flags
+from absl import logging
 import apache_beam as beam
 import numpy as np
 from weatherbenchX import aggregation
@@ -278,7 +279,7 @@ def main(argv: Sequence[str]) -> None:
         'Lead time start and stop must be both specified or both None.'
     )
   if LEAD_TIME_START.value is None:
-    print('Using lead times from dataset.')
+    logging.info('Using lead times from dataset.')
     if PREDICTION.value in [
         'persistence',
         'climatology',
@@ -297,7 +298,7 @@ def main(argv: Sequence[str]) -> None:
       lead_times = loader_copy._ds.lead_time.values # pylint: disable=protected-access
       
   else:
-    print(f"Creating lead times from {LEAD_TIME_START.value} to {LEAD_TIME_STOP.value} every {LEAD_TIME_FREQUENCY.value} hours.")
+    logging.info(f"Creating lead times from {LEAD_TIME_START.value} to {LEAD_TIME_STOP.value} every {LEAD_TIME_FREQUENCY.value} hours.")
     lead_time_start = LEAD_TIME_START.value
     lead_time_stop = LEAD_TIME_STOP.value
     lead_times = np.arange(
@@ -335,8 +336,8 @@ def main(argv: Sequence[str]) -> None:
       init_time_chunk_size=INIT_TIME_CHUNK_SIZE.value,
       lead_time_chunk_size=LEAD_TIME_CHUNK_SIZE.value,
   )
-  print(f'Number of init times: {len(init_times)}, first init time: {init_times[0]}, last init time: {init_times[-1]}')
-  print(f'Lead times: {lead_times}')
+  logging.info(f'Number of init times: {len(init_times)}, first init time: {init_times[0]}, last init time: {init_times[-1]}')
+  logging.info(f'Lead times: {lead_times}')
 
   ##############################################################################
   # 3. Define metrics
@@ -443,7 +444,7 @@ def main(argv: Sequence[str]) -> None:
     filename += '_temporal'
   filename += '.nc'
   out_path = os.path.join(OUTPUT_DIR.value, filename)
-  print(f'Save path: {out_path}')
+  logging.info(f'Save path: {out_path}')
 
   with beam.Pipeline(runner=RUNNER.value, argv=argv) as root:
     beam_pipeline.define_pipeline(
