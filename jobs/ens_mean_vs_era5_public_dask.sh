@@ -39,6 +39,8 @@ export NUMEXPR_NUM_THREADS=1
 THREADS_PER_WORKER=8
 N_WORKERS=$((SLURM_CPUS_PER_TASK / THREADS_PER_WORKER))
 
+# echo "OVERRIDE - n_workers: 1, threads_per_worker: 1 (for testing concurrent runs)"
+
 python public_benchmark/run_benchmark_evaluation.py \
     --config=public_configs \
     --prediction=ens_mean \
