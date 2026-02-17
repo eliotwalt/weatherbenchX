@@ -8,6 +8,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --exclusive
+#SBATCH --cpus-per-task=192
 #SBATCH --time=120:00:00
 #SBATCH --output=logs/%j.out
 #SBATCH --error=logs/%j.out
