@@ -235,7 +235,7 @@ def run_pipeline(
     cluster = LocalCluster(
         n_workers=n_workers,
         threads_per_worker=threads_per_worker,
-        processes=True,  # Use processes for better parallelism with GIL
+        processes=False,
         memory_limit='auto',
     )
     client = Client(cluster)
@@ -248,18 +248,18 @@ def run_pipeline(
       client.wait_for_workers(n_workers, timeout=120)
       logging.info(f'All {n_workers} workers ready.')
 
-      # Scatter large objects to workers ONCE
-      # Use direct=True to bypass the scheduler and send directly to workers,
-      # which avoids blocking the scheduler's event loop during serialization
-      # Use hash=False to skip computing hashes (faster for large objects)
-      logging.info('Broadcasting data loaders and metrics to workers...')
-      [pred_loader_fut, tgt_loader_fut, metrics_fut, agg_fut] = client.scatter(
-          [predictions_loader, targets_loader, metrics, aggregator],
-          broadcast=True,
-          direct=True,
-          hash=False,
-      )
-      logging.info('Broadcast complete.')
+      # # Scatter large objects to workers ONCE
+      # # Use direct=True to bypass the scheduler and send directly to workers,
+      # # which avoids blocking the scheduler's event loop during serialization
+      # # Use hash=False to skip computing hashes (faster for large objects)
+      # logging.info('Broadcasting data loaders and metrics to workers...')
+      # [pred_loader_fut, tgt_loader_fut, metrics_fut, agg_fut] = client.scatter(
+      #     [predictions_loader, targets_loader, metrics, aggregator],
+      #     broadcast=True,
+      #     direct=True,
+      #     hash=False,
+      # )
+      # logging.info('Broadcast complete.')
 
       # Submit tasks using the scattered futures
       # This way each task references the pre-distributed objects instead of
@@ -271,10 +271,10 @@ def run_pipeline(
               i,
               init_chunk,
               lead_chunk,
-              pred_loader_fut,
-              tgt_loader_fut,
-              metrics_fut,
-              agg_fut,
+              predictions_loader, #pred_loader_fut,
+              targets_loader, #tgt_loader_fut,
+              metrics, #metrics_fut,
+              aggregator, #agg_fut,
               pure=False,  # Tasks have side effects (logging, progress counter)
           )
           for i, (init_chunk, lead_chunk) in enumerate(chunks)
