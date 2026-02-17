@@ -261,27 +261,50 @@ def run_pipeline(
       # )
       # logging.info('Broadcast complete.')
 
-      # Submit tasks using the scattered futures
-      # This way each task references the pre-distributed objects instead of
-      # embedding them in the task graph
-      logging.info(f'Submitting {n_chunks} tasks to cluster...')
-      futures = [
-          client.submit(
-              _process_chunk_with_refs,
+      # # Submit tasks using the scattered futures
+      # # This way each task references the pre-distributed objects instead of
+      # # embedding them in the task graph
+      # logging.info(f'Submitting {n_chunks} tasks to cluster...')
+      # futures = [
+      #     client.submit(
+      #         _process_chunk_with_refs,
+      #         i,
+      #         init_chunk,
+      #         lead_chunk,
+      #         pred_loader_fut,
+      #         tgt_loader_fut,
+      #         metrics_fut,
+      #         agg_fut,
+      #         pure=False,  # Tasks have side effects (logging, progress counter)
+      #     )
+      #     for i, (init_chunk, lead_chunk) in enumerate(chunks)
+      # ]
+
+      # # Gather results
+      # aggregation_states = client.gather(futures)
+      
+      # Alternative: create delayed tasks that reference the global variables (which are automatically resolved on workers) instead of scattering explicitly. This is simpler and often works well for moderately large objects
+      logging.info(f'Creating delayed tasks for {n_chunks} chunks...')
+      delayed_tasks = [
+          dask.delayed(_process_chunk_with_refs)(
               i,
               init_chunk,
               lead_chunk,
-              predictions_loader, #pred_loader_fut,
-              targets_loader, #tgt_loader_fut,
-              metrics, #metrics_fut,
-              aggregator, #agg_fut,
-              pure=False,  # Tasks have side effects (logging, progress counter)
-          )
+              predictions_loader,
+              targets_loader,
+              metrics,
+              aggregator,
+          )          
           for i, (init_chunk, lead_chunk) in enumerate(chunks)
       ]
+      logging.info('Computing delayed tasks...')
+      if show_progress:
+        from dask.diagnostics import ProgressBar
 
-      # Gather results
-      aggregation_states = client.gather(futures)
+        with ProgressBar():
+          aggregation_states = dask.compute(*delayed_tasks)
+      else:
+        aggregation_states = dask.compute(*delayed_tasks)
 
     finally:
       client.close()
