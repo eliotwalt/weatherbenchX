@@ -207,6 +207,7 @@ def main(argv: Sequence[str]) -> None:
       path=prediction_config['path'],
       variables=variables,
       sel_kwargs={'level': levels},
+      compute=False if BACKEND.value == 'dask' else True,
       **prediction_loader_kwargs,
   )
   target_loader = xarray_loaders.TargetsFromXarray(
@@ -217,6 +218,7 @@ def main(argv: Sequence[str]) -> None:
       # as xarray alignes the datasets but we will still align here.
       # (It is a problem for the climatology, see below.)
       preprocessing_fn=lambda ds: ds.sortby('latitude'),
+      compute=False if BACKEND.value == 'dask' else True,
   )
 
   ##############################################################################
@@ -369,7 +371,9 @@ def main(argv: Sequence[str]) -> None:
   # Load land-sea mask from ERA5
   land_sea_mask = xr.open_zarr(
       configs.target_configs[f'era5_{RESOLUTION.value}']['path']
-  )['land_sea_mask'].compute()
+  )['land_sea_mask']
+  if BACKEND.value != 'dask':
+    land_sea_mask = land_sea_mask.compute()
   bin_by = [binning.Regions(REGIONS, land_sea_mask=land_sea_mask)]
 
   if TEMPORAL.value:
