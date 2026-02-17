@@ -56,7 +56,7 @@ python public_benchmark/run_benchmark_evaluation.py \
     --lead_time_chunk_size=12 \
     --init_time_chunk_size=4 \
     --backend=dask \
-    --n_workers=1 \
-    --threads_per_worker=1
-    # --n_workers=$N_WORKERS \
-    # --threads_per_worker=$THREADS_PER_WORKER
+    --n_workers=$N_WORKERS \
+    --threads_per_worker=$THREADS_PER_WORKER
+    # --n_workers=1 \
+    # --threads_per_worker=1
