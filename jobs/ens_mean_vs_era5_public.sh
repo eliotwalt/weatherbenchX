@@ -7,8 +7,7 @@
 #SBATCH --partition=fat_genoa
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --exclusive
-#SBATCH --cpus-per-task=192
+#SBATCH --cpus-per-task=92
 #SBATCH --time=120:00:00
 #SBATCH --output=logs/%j.out
 #SBATCH --error=logs/%j.out
@@ -21,6 +20,7 @@ set -u
 
 echo "Running on node: $SLURMD_NODENAME"
 echo "Allocated CPUs: $SLURM_CPUS_PER_TASK"
+echo "direct_num_workers: $((SLURM_CPUS_PER_TASK/2))"
 
 # Activate virtual environment
 source env/venv/bin/activate
@@ -50,7 +50,6 @@ python public_benchmark/run_benchmark_evaluation.py \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=1 \
     --runner=DirectRunner 
-    # -- \
-    # --direct_running_mode=multi_threading \
-    # --direct_num_workers=1 \
-    # --sdk_worker_parallelism=1
+    -- \
+    --direct_running_mode=multi_threading \
+    --direct_num_workers=$((SLURM_CPUS_PER_TASK/2))
