@@ -266,7 +266,7 @@ def generate_unique_statistics_for_all_metrics(
       raise ValueError(
           'Failed to compute statistic'
           f' {k}={stat} from:\n{predictions=}\n{targets=}'
-          f'Underlying error: {e}'
+          f' Underlying error: {e}'
       ) from e
 
 
