@@ -53,5 +53,4 @@ python public_benchmark/run_benchmark_evaluation.py \
     -- \
     --direct_running_mode=multi_threading \
     --direct_num_workers=1 \
-    --sdk_worker_parallelism=1 \
-    --direct_runner_control_port_deadline=3600
+    --sdk_worker_parallelism=1
