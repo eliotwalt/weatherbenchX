@@ -7,8 +7,7 @@
 #SBATCH --partition=fat_genoa
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=192
-#SBATCH --exclusive
+#SBATCH --cpus-per-task=48
 #SBATCH --time=120:00:00
 #SBATCH --output=logs/%j.out
 #SBATCH --error=logs/%j.out
@@ -26,10 +25,10 @@ echo "Allocated CPUs: $SLURM_CPUS_PER_TASK"
 source env/venv/bin/activate
 
 # Optional but recommended to prevent oversubscription
-export OMP_NUM_THREADS=1
-export MKL_NUM_THREADS=1
-export OPENBLAS_NUM_THREADS=1
-export NUMEXPR_NUM_THREADS=1
+# export OMP_NUM_THREADS=1
+# export MKL_NUM_THREADS=1
+# export OPENBLAS_NUM_THREADS=1
+# export NUMEXPR_NUM_THREADS=1
 
 # ================================
 # Run WeatherBenchX evaluation
@@ -52,4 +51,5 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --runner=DirectRunner \
     -- \
     --direct_running_mode=multi_processing \
-    --direct_num_workers=0
+    --direct_num_workers=$SLURM_CPUS_PER_TASK \
+    --sdk_worker_parallelism=1
