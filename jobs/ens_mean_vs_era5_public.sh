@@ -49,7 +49,7 @@ python public_benchmark/run_benchmark_evaluation.py \
     --output_dir=./results \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=1 \
-    --runner=DirectRunner 
-    -- \
-    --direct_running_mode=multi_threading \
-    --direct_num_workers=$((SLURM_CPUS_PER_TASK/2))
+    --runner=FlinkRunner
+    # -- \
+    # --direct_running_mode=multi_threading \
+    # --direct_num_workers=$((SLURM_CPUS_PER_TASK/2))
