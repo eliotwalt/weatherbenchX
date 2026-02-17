@@ -237,12 +237,21 @@ def run_pipeline(
     try:
       logging.info(f'Dask dashboard available at: {client.dashboard_link}')
 
-      # Scatter large objects to workers ONCE (broadcast=True sends to all workers)
-      # This avoids serializing them repeatedly for each task
+      # Wait for workers to be ready before scattering
+      logging.info(f'Waiting for {n_workers} workers to be ready...')
+      client.wait_for_workers(n_workers, timeout=120)
+      logging.info(f'All {n_workers} workers ready.')
+
+      # Scatter large objects to workers ONCE
+      # Use direct=True to bypass the scheduler and send directly to workers,
+      # which avoids blocking the scheduler's event loop during serialization
+      # Use hash=False to skip computing hashes (faster for large objects)
       logging.info('Broadcasting data loaders and metrics to workers...')
       [pred_loader_fut, tgt_loader_fut, metrics_fut, agg_fut] = client.scatter(
           [predictions_loader, targets_loader, metrics, aggregator],
           broadcast=True,
+          direct=True,
+          hash=False,
       )
       logging.info('Broadcast complete.')
 
