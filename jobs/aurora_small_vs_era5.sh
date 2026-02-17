@@ -7,7 +7,6 @@
 #SBATCH --partition=fat_genoa
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=192
 #SBATCH --exclusive
 #SBATCH --time=120:00:00
 #SBATCH --output=logs/%j.out
@@ -26,10 +25,10 @@ echo "Allocated CPUs: $SLURM_CPUS_PER_TASK"
 source env/venv/bin/activate
 
 # Optional but recommended to prevent oversubscription
-# export OMP_NUM_THREADS=1
-# export MKL_NUM_THREADS=1
-# export OPENBLAS_NUM_THREADS=1
-# export NUMEXPR_NUM_THREADS=1
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1
 
 # ================================
 # Run WeatherBenchX evaluation
@@ -47,10 +46,10 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --lead_time_stop=3000 \
     --lead_time_frequency=6 \
     --output_dir=/projects/prjs1808/ewalt1/Xaurora/train/16g/2026-01-23_10-18-59/wbx_benchmark/ \
-    --lead_time_chunk_size=12 \
-    --init_time_chunk_size=4 \
+    --lead_time_chunk_size=4 \
+    --init_time_chunk_size=1 \
     --runner=DirectRunner \
     -- \
     --direct_running_mode=multi_processing \
-    --direct_num_workers=$SLURM_CPUS_PER_TASK \
+    --direct_num_workers=1 \
     --sdk_worker_parallelism=1
