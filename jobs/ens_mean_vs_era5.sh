@@ -49,7 +49,12 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --output_dir=./results \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=1 \
-    --runner=FlinkRunner
-    # -- \
-    # --direct_running_mode=in_memory \
-    # --direct_num_workers=0
+    --runner=FlinkRunner \
+    -- \
+    --flink_master=local \
+    --environment_type=LOOPBACK \
+    --flink_submit_uber_jar \
+    --parallelism=32 \
+    --flink_conf='taskmanager.memory.network.fraction=0.2' \
+    --flink_conf='taskmanager.memory.network.min=256mb' \
+    --flink_conf='taskmanager.memory.network.max=2gb'
