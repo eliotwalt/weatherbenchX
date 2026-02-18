@@ -7,8 +7,8 @@
 #SBATCH --partition=fat_genoa
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=192
 #SBATCH --exclusive
+#SBATCH --cpus-per-task=192
 #SBATCH --time=120:00:00
 #SBATCH --output=logs/%j.out
 #SBATCH --error=logs/%j.out
@@ -21,7 +21,6 @@ set -u
 
 echo "Running on node: $SLURMD_NODENAME"
 echo "Allocated CPUs: $SLURM_CPUS_PER_TASK"
-echo "direct_num_workers: $((SLURM_CPUS_PER_TASK/2))"
 
 # Activate virtual environment
 source env/venv/bin/activate
@@ -36,21 +35,20 @@ export NUMEXPR_NUM_THREADS=1
 # Run WeatherBenchX evaluation
 # ================================
 
-python public_benchmark/run_benchmark_evaluation.py \
-    --config=public_configs \
-    --prediction=ens_mean \
+python xaurora_benchmark/run_benchmark_evaluation.py \
+    --config=xaurora_configs \
+    --prediction=xaurora_small_pretrained \
     --target=era5 \
     --resolution=1440x721 \
-    --time_start=2020-01-01 \
-    --time_stop=2020-12-31 \
-    --year=2020 \
+    --time_start=2021-01-01 \
+    --time_stop=2021-12-31 \
+    --year=2021 \
     --lead_time_start=6 \
     --lead_time_stop=366 \
     --lead_time_frequency=6 \
-    --output_dir=./results \
-    --lead_time_chunk_size=4 \
-    --init_time_chunk_size=1 \
-    --runner=FlinkRunner
-    # -- \
-    # --direct_running_mode=multi_threading \
-    # --direct_num_workers=$((SLURM_CPUS_PER_TASK/2))
+    --output_dir=/projects/prjs1808/ewalt1/Xaurora/train/16g/2026-01-23_10-18-59/wbx_benchmark/ \
+    --lead_time_chunk_size=1 \
+    --init_time_chunk_size=8 \
+    --runner=DirectRunner \
+    -- \
+    --job_server_timeout=43200

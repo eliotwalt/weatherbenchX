@@ -49,8 +49,10 @@ import importlib
 import os
 from absl import app
 from absl import flags
+import apache_beam as beam
 import numpy as np
 from weatherbenchX import aggregation
+from weatherbenchX import beam_pipeline
 from weatherbenchX import binning
 from weatherbenchX import time_chunks
 from weatherbenchX import weighting
@@ -101,20 +103,6 @@ TEMPORAL = flags.DEFINE_bool(
     'temporal', False, 'If true, do not reduce over init time.'
 )
 RUNNER = flags.DEFINE_string('runner', None, 'beam.runners.Runner')
-BACKEND = flags.DEFINE_enum(
-    'backend', 'beam', ['beam', 'dask'],
-    'Processing backend: "beam" for Apache Beam, "dask" for pure dask/xarray.'
-)
-N_WORKERS = flags.DEFINE_integer(
-    'n_workers', 1,
-    'Number of dask workers/processes (only used with --backend=dask). '
-    'For I/O-bound workloads, fewer workers with more threads is often better.'
-)
-THREADS_PER_WORKER = flags.DEFINE_integer(
-    'threads_per_worker', 1,
-    'Number of threads per dask worker (only used with --backend=dask). '
-    'For I/O-bound workloads like cloud storage, try 4-8 threads per worker.'
-)
 
 
 _DEFAULT_LEVELS = [500, 700, 850]
@@ -207,7 +195,6 @@ def main(argv: Sequence[str]) -> None:
       path=prediction_config['path'],
       variables=variables,
       sel_kwargs={'level': levels},
-      compute=False if BACKEND.value == 'dask' else True,
       **prediction_loader_kwargs,
   )
   target_loader = xarray_loaders.TargetsFromXarray(
@@ -218,7 +205,6 @@ def main(argv: Sequence[str]) -> None:
       # as xarray alignes the datasets but we will still align here.
       # (It is a problem for the climatology, see below.)
       preprocessing_fn=lambda ds: ds.sortby('latitude'),
-      compute=False if BACKEND.value == 'dask' else True,
   )
 
   ##############################################################################
@@ -371,9 +357,7 @@ def main(argv: Sequence[str]) -> None:
   # Load land-sea mask from ERA5
   land_sea_mask = xr.open_zarr(
       configs.target_configs[f'era5_{RESOLUTION.value}']['path']
-  )['land_sea_mask']
-  if BACKEND.value != 'dask':
-    land_sea_mask = land_sea_mask.compute()
+  )['land_sea_mask'].compute()
   bin_by = [binning.Regions(REGIONS, land_sea_mask=land_sea_mask)]
 
   if TEMPORAL.value:
@@ -401,31 +385,16 @@ def main(argv: Sequence[str]) -> None:
   out_path = os.path.join(OUTPUT_DIR.value, filename)
   print(f'Save path: {out_path}')
 
-  if BACKEND.value == 'dask':
-    from weatherbenchX import dask_pipeline
-    dask_pipeline.run_pipeline(
+  with beam.Pipeline(runner=RUNNER.value, argv=argv) as root:
+    beam_pipeline.define_pipeline(
+        root,
         times,
         prediction_loader,
         target_loader,
         all_metrics,
         aggregation_method,
         out_path=out_path,
-        n_workers=N_WORKERS.value,
-        threads_per_worker=THREADS_PER_WORKER.value,
     )
-  else:
-    import apache_beam as beam
-    from weatherbenchX import beam_pipeline
-    with beam.Pipeline(runner=RUNNER.value, argv=argv) as root:
-      beam_pipeline.define_pipeline(
-          root,
-          times,
-          prediction_loader,
-          target_loader,
-          all_metrics,
-          aggregation_method,
-          out_path=out_path,
-      )
 
 
 if __name__ == '__main__':
