@@ -37,7 +37,7 @@ export NUMEXPR_NUM_THREADS=1
 
 python xaurora_benchmark/run_benchmark_evaluation.py \
     --config=xaurora_configs \
-    --prediction=xaurora_small_pretrained \
+    --prediction=xaurora_small \
     --target=era5 \
     --resolution=1440x721 \
     --time_start=2021-01-01 \
