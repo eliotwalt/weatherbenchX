@@ -51,7 +51,7 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --init_time_chunk_size=8 \
     --runner=DirectRunner \
     -- \
-    --job_server_timeout=7200
+    --job_server_timeout=43200
 
 # something that worked (1h30m runtime):
 # python xaurora_benchmark/run_benchmark_evaluation.py \
