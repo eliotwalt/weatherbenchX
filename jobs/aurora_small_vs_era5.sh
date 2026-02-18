@@ -51,4 +51,6 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --init_time_chunk_size=12 \
     --runner=DirectRunner \
     -- \
-    --job_server_timeout=7200
+    --job_server_timeout=7200 \
+    --direct_running_mode=multi_threading \
+    --direct_num_workers=$((SLURM_CPUS_PER_TASK/2))
