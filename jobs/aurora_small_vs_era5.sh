@@ -41,14 +41,14 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --target=era5 \
     --resolution=1440x721 \
     --time_start=2021-01-01 \
-    --time_stop=2021-12-31 \
+    --time_stop=2021-04-30 \
     --year=2021 \
     --lead_time_start=6 \
-    --lead_time_stop=366 \
+    --lead_time_stop=126 \
     --lead_time_frequency=6 \
     --output_dir=/projects/prjs1808/ewalt1/Xaurora/train/16g/2026-01-23_10-18-59/wbx_benchmark/ \
     --lead_time_chunk_size=4 \
     --init_time_chunk_size=8 \
     --runner=DirectRunner \
     -- \
-    --job_server_timeout=3600
+    --job_server_timeout=7200
