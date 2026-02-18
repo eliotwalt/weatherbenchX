@@ -15,7 +15,7 @@
 
 import copy
 
-years = [2021]
+years = [2021, 2022]
 
 upper_level_variables = [
     'geopotential',
@@ -53,11 +53,18 @@ deterministic_prediction_configs = {
             'variables': standard_variables,
         },
     ),
-    # HRES T0
+    # HRES
     **dict.fromkeys(
-        [f'hres_t0_1440x721_{y}' for y in years],
+        [f'hres_1440x721_{y}' for y in years],
         {
-            'path': '/projects/prjs1808/datasets/HRES_T0/datasets/hres_t0/2016-2022-6h-1440x721.zarr/',
+            'path': 'gs://weatherbench2/datasets/hres/2016-2022-0012-1440x721.zarr',
+            'variables': standard_variables,
+        },
+    ),
+    **dict.fromkeys(
+        [f'hres_64x32_{y}' for y in years],
+        {
+            'path': 'gs://weatherbench2/datasets/hres/2016-2022-0012-64x32_equiangular_conservative.zarr',
             'variables': standard_variables,
         },
     ),
@@ -151,9 +158,20 @@ target_configs = {
             'preprocessing_fn': lambda ds: ds.sortby('latitude')
         },
     },
+    'era5_64x32': {
+        'path': 'gs://weatherbench2/datasets/era5/1959-2023_01_10-6h-64x32_equiangular_conservative.zarr',
+        'variables': standard_variables,
+        'data_loader_kwargs': {
+            'preprocessing_fn': lambda ds: ds.sortby('latitude')
+        },
+    },
     # HRES T0
     'hres_t0_1440x721': {
         'path': '/projects/prjs1808/datasets/HRES_T0/datasets/hres_t0/2016-2022-6h-1440x721.zarr/',
+        'variables': standard_variables,
+    },
+    'hres_t0_64x32': {
+        'path': 'gs://weatherbench2/datasets/hres_t0/2016-2022-6h-64x32_equiangular_conservative.zarr',
         'variables': standard_variables,
     },
 }
@@ -167,6 +185,13 @@ climatology_configs = {
             'data_loader_kwargs': {
                 'preprocessing_fn': lambda ds: ds.sortby('latitude')
             },
+        },
+    ),
+    **dict.fromkeys(
+        [f'era5_64x32_{y}' for y in years],
+        {
+            'path': 'gs://weatherbench2/datasets/era5-hourly-climatology/1990-2017_6h_64x32_equiangular_conservative.zarr',
+            'variables': standard_variables,
         },
     ),
 }

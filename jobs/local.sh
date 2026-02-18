@@ -1,0 +1,17 @@
+python xaurora_benchmark/run_benchmark_evaluation.py \
+    --config=xaurora_configs \
+    --prediction=hres \
+    --target=era5 \
+    --resolution=64x32 \
+    --time_start=2022-01-01 \
+    --time_stop=2022-01-05 \
+    --year=2022 \
+    --lead_time_start=6 \
+    --lead_time_stop=18 \
+    --lead_time_frequency=6 \
+    --output_dir=./results \
+    --lead_time_chunk_size=1 \
+    --init_time_chunk_size=1 \
+    --runner=DirectRunner \
+    -- \
+    --job_server_timeout=7200

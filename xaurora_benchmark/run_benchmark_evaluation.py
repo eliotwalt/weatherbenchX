@@ -64,6 +64,8 @@ from weatherbenchX.metrics import probabilistic
 from weatherbenchX.metrics import wrappers
 import xarray as xr
 
+from utils import apply_convolve_fill_nan
+
 CONFIG = flags.DEFINE_string('config', None, 'beam.runners.Runner')
 PREDICTION = flags.DEFINE_string('prediction', None, 'Prediction name.')
 TARGET = flags.DEFINE_string('target', None, 'Target name.')
@@ -193,10 +195,23 @@ def main(argv: Sequence[str]) -> None:
     )
   else:
     prediction_loader = xarray_loaders.PredictionsFromXarray
+    
+  # Deal with NaNs in HRES and HRES-T0
+  if PREDICTION.value in ['hres', 'hres_t0']:
+    prediction_process_chunk_fn = apply_convolve_fill_nan
+  else: prediction_process_chunk_fn = None
+  
+  if TARGET.value == 'hres_t0':
+    target_process_chunk_fn = apply_convolve_fill_nan
+  else: target_process_chunk_fn = None
+    
+    
+    
   prediction_loader = prediction_loader(
       path=prediction_config['path'],
       variables=variables,
       sel_kwargs={'level': levels},
+      process_chunk_fn=prediction_process_chunk_fn,
       **prediction_loader_kwargs,
   )
   prediction_loader.maybe_prepare_dataset() # load such that we can access init times later
@@ -204,6 +219,7 @@ def main(argv: Sequence[str]) -> None:
       path=target_config['path'],
       variables=variables,
       sel_kwargs={'level': levels},
+      process_chunk_fn=target_process_chunk_fn,
       # For some datasets, latitude is reversed. This isn't a problem per se,
       # as xarray alignes the datasets but we will still align here.
       # (It is a problem for the climatology, see below.)
