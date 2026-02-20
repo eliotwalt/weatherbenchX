@@ -4,7 +4,7 @@
 # SBATCH CONFIGURATION
 # ================================
 #SBATCH --job-name=wbx
-#SBATCH --partition=fat_genoa
+#SBATCH --partition=genoa
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --exclusive
