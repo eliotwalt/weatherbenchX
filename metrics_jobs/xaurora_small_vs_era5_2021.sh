@@ -53,7 +53,7 @@
 #     -- \
 #     --job_server_timeout=43200
 
-./metrics_jobs/metrics.sh \
+sbatch ./metrics_jobs/metrics.sh \
     --prediction=xaurora_small \
     --target=era5 \
     --year=2021 \

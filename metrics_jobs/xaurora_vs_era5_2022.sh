@@ -1,4 +1,4 @@
-./metrics_jobs/metrics.sh \
+sbatch ./metrics_jobs/metrics.sh \
     --prediction=xaurora \
     --target=era5 \
     --year=2022 \

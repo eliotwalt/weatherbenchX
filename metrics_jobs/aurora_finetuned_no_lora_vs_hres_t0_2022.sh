@@ -1,4 +1,4 @@
-./metrics_jobs/metrics.sh \
+sbatch ./metrics_jobs/metrics.sh \
     --prediction=aurora_finetuned_no_lora_hres_init \
     --target=hres_t0 \
     --year=2022 \

@@ -91,7 +91,7 @@
 # #     -- \
 # #     --job_server_timeout=7200 \
 
-./metrics_jobs/metrics.sh \
+sbatch ./metrics_jobs/metrics.sh \
     --prediction=aurora_small_pretrained \
     --target=era5 \
     --year=2021 \
