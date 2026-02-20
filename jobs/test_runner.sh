@@ -40,10 +40,13 @@ if [ "$FORCE_DIRECT_RUNNER" = true ]; then
     echo "Forcing DirectRunner for local execution"
     source env/venv_direct/bin/activate
     RUNNER_OPTION="""
-    --direct_running_mode=multi_threading \
-    --direct_num_workers=0 \
     --job_server_timeout=43200
     """
+    # RUNNER_OPTION="""
+    # --direct_running_mode=multi_threading \
+    # --direct_num_workers=0 \
+    # --job_server_timeout=43200
+    # """
 else
     echo "Using default direct runner (Prism)"
     source env/venv/bin/activate
