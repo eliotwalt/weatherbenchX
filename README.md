@@ -1,4 +1,4 @@
-![logo](logos/wbx-logo-wide.png)
+![logo](imgs/wbx-logo-wide.png)
 
 # WeatherBench-X: A modular framework for evaluating weather forecasts
 
