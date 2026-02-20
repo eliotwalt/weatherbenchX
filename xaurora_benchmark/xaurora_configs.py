@@ -195,6 +195,7 @@ target_configs = {
     # ERA5
     'era5_1440x721': {
         'path': '/gpfs/work3/2/managed_datasets/ERA5/era5-gcp-zarr/ar/1959-2022-wb13-6h-0p25deg-chunk-1.zarr-v2/',
+        'path_2022': "gs://weatherbench2/datasets/era5/1959-2023_01_10-wb13-6h-1440x721.zarr/",
         'variables': standard_variables,
         'data_loader_kwargs': {
             'preprocessing_fn': lambda ds: ds.sortby('latitude')

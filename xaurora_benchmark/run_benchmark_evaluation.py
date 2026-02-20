@@ -215,8 +215,13 @@ def main(argv: Sequence[str]) -> None:
       **prediction_loader_kwargs,
   )
   prediction_loader.maybe_prepare_dataset() # load such that we can access init times later
+  
+  # Deal with our ERA5 not having 2022
+  if TARGET.value == 'era5' and YEAR.value == '2022': path_key = 'path_2022'
+  else: path_key = 'path'
+  
   target_loader = xarray_loaders.TargetsFromXarray(
-      path=target_config['path'],
+      path=target_config[path_key],
       variables=variables,
       sel_kwargs={'level': levels},
       process_chunk_fn=target_process_chunk_fn,
