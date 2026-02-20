@@ -24,12 +24,14 @@ PREDICTION=""
 TARGET=""
 YEAR=""
 OUTPUT_DIR=""
+LEAD_TIME_STOP="366"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --prediction=*) PREDICTION="${1#*=}" ;;
         --target=*) TARGET="${1#*=}" ;;
         --year=*) YEAR="${1#*=}" ;;
         --output_dir=*) OUTPUT_DIR="${1#*=}" ;;
+        --lead_time_stop=*) LEAD_TIME_STOP="${1#*=}" ;;
         *) echo "Unknown parameter passed: $1" ; exit 1 ;;
     esac
     shift
@@ -38,7 +40,7 @@ done
 # make sure all required arguments are provided
 if [ -z "$PREDICTION" ] || [ -z "$TARGET" ] || [ -z "$YEAR" ] || [ -z "$OUTPUT_DIR" ]; then
     echo "Error: Missing required arguments"
-    echo "Usage: $0 --prediction=<prediction> --target=<target> --year=<year> --output_dir=<output_dir>"
+    echo "Usage: $0 --prediction=<prediction> --target=<target> --year=<year> --output_dir=<output_dir> [--lead_time_stop=<lead_time_stop>]"
     exit 1
 fi
 
@@ -47,6 +49,7 @@ echo "Prediction: $PREDICTION"
 echo "Target: $TARGET"
 echo "Year: $YEAR"
 echo "Output directory: $OUTPUT_DIR"
+echo "Lead time stop: $LEAD_TIME_STOP"
 
 # ================================
 # Environment setup
@@ -79,7 +82,7 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --time_stop=$YEAR-12-31 \
     --year=$YEAR \
     --lead_time_start=6 \
-    --lead_time_stop=366 \
+    --lead_time_stop=$LEAD_TIME_STOP \
     --lead_time_frequency=6 \
     --output_dir=$OUTPUT_DIR \
     --lead_time_chunk_size=1 \
