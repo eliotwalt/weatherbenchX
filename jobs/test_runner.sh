@@ -9,7 +9,7 @@
 #SBATCH --ntasks=1
 #SBATCH --exclusive
 #SBATCH --cpus-per-task=96
-#SBATCH --time=1:00:00
+#SBATCH --time=2:00:00
 #SBATCH --output=logs/%j.out
 #SBATCH --error=logs/%j.out
 
@@ -76,7 +76,7 @@ python xaurora_benchmark/run_benchmark_evaluation.py \
     --target=era5 \
     --resolution=1440x721 \
     --time_start=2021-01-01 \
-    --time_stop=2021-03-31 \
+    --time_stop=2021-01-31 \
     --year=2021 \
     --lead_time_start=6 \
     --lead_time_stop=366 \
