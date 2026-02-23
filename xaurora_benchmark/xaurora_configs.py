@@ -102,7 +102,13 @@ deterministic_prediction_configs = {
         'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_hres_init_2022_15d_20-SDE-steps/aurora-finetuned_forecasts.zarr",
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
-    }
+    },
+    # Aurora FT vs HRES-t0 (15d/2022)
+    'aurora_finetuned_hres_init_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise_ft-hres-nowd/forecast_hres_init_2022_15d_20-SDE-steps/aurora-finetuned_forecasts.zarr',
+        'variables': standard_variables,
+        'levels': [250, 500, 700, 850]
+    },
 }
 # For ensembles, add single member config
 add_single_member_config = ['ens', 'neuralgcm_ens']
@@ -188,7 +194,13 @@ probabilistic_prediction_configs = {
         'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_hres_init_2022_15d_20-SDE-steps/xaurora_forecasts.zarr",
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
-    }
+    },
+    # Xaurora FT vs HRES-t0 (15d/2022)
+    'xaurora_finetuned_hres_init_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise_ft-hres-nowd/forecast_hres_init_2022_15d_20-SDE-steps/xaurora_forecasts.zarr',
+        'variables': standard_variables,
+        'levels': [250, 500, 700, 850]
+    },
 }
 
 target_configs = {
