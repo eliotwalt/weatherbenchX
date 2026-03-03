@@ -109,6 +109,12 @@ deterministic_prediction_configs = {
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
+    # Aurora FT (from aurora code) vs HRES-t0 (15d/2022)
+    'aurora_finetuned_from_aurora_hres_init_1440x721_2022': {
+        "path": "/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_hres_init_2022_15d/aurora-finetuned-from-aurora_forecasts.zarr",
+        "variables": standard_variables,
+        "levels": [250, 500, 700, 850]
+    },
 }
 # For ensembles, add single member config
 add_single_member_config = ['ens', 'neuralgcm_ens']
