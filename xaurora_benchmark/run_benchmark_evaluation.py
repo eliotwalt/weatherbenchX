@@ -464,7 +464,15 @@ def main(argv: Sequence[str]) -> None:
   if TEMPORAL.value:
     filename += '_temporal'
   filename += '.nc'
-  out_path = os.path.join(OUTPUT_DIR.value, filename)
+  
+  if OUTPUT_DIR.value == 'default' or OUTPUT_DIR.value is None:
+    # create default output dir based on the the zarr path of the predictions
+    base_path = os.path.dirname(prediction_config['path'])
+    out_path = os.path.join(base_path, filename)
+    logging.info(f'Using default output dir based on prediction path: {out_path}')
+  else:
+    out_path = os.path.join(OUTPUT_DIR.value, filename)
+    
   logging.info(f'Save path: {out_path}')
 
   with beam.Pipeline(runner=RUNNER.value, argv=argv) as root:

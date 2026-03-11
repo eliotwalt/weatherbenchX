@@ -23,7 +23,7 @@
 PREDICTION=""
 TARGET=""
 YEAR=""
-OUTPUT_DIR=""
+OUTPUT_DIR="default" # will be calculated based on the the zarr path of the predictions
 LEAD_TIME_STOP="366"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -38,9 +38,9 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # make sure all required arguments are provided
-if [ -z "$PREDICTION" ] || [ -z "$TARGET" ] || [ -z "$YEAR" ] || [ -z "$OUTPUT_DIR" ]; then
+if [ -z "$PREDICTION" ] || [ -z "$TARGET" ] || [ -z "$YEAR" ]; then
     echo "Error: Missing required arguments"
-    echo "Usage: $0 --prediction=<prediction> --target=<target> --year=<year> --output_dir=<output_dir> [--lead_time_stop=<lead_time_stop>]"
+    echo "Usage: $0 --prediction=<prediction> --target=<target> --year=<year> [--output_dir=<output_dir>] [--lead_time_stop=<lead_time_stop>]"
     exit 1
 fi
 
