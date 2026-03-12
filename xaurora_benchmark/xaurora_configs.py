@@ -200,7 +200,7 @@ probabilistic_prediction_configs = {
     # Xaurora vs ERA5 (15d/2022)
     'xaurora_1440x721_2022': {
         # TODO: update #  'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2022_15d_20-SDE-steps/xaurora_forecasts.zarr",
-        # check path in `logs/forecast/8g/20657712.log`
+        'path': '/gpfs/work4/0/prjs1808/ewalt1/Xaurora/train/16g/2026-01-30_02-40-30/forecast_2026-03-11_18-15-50/xaurora_forecasts.zarr/',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
