@@ -79,9 +79,16 @@ deterministic_prediction_configs = {
             'levels': [500, 700, 850],
         },
     ),
-    # Aurora Small vs ERA5 (15d/2021)
-    'aurora_small_pretrained_1440x721_2021': {
-        'path': "/projects/prjs1808/ewalt1/Xaurora/train/small-flow-map_600K_0.1-noise/forecast_20-SDE-steps/aurora-small-pretrained_forecasts.zarr",
+    # # Aurora Small vs ERA5 (15d/2021)
+    # # DEPRECATED
+    # 'aurora_small_pretrained_1440x721_2021': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/small-flow-map_600K_0.1-noise/forecast_20-SDE-steps/aurora-small-pretrained_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # Aurora Small vs ERA5 (5d/2022)
+    'aurora_small_pretrained_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/aurora-small-pretrained_forecasts.zarr',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
@@ -179,15 +186,29 @@ probabilistic_prediction_configs = {
             'levels': [500, 700, 850],
         },
     ),
-    # Xaurora Small vs ERA5 (15d/2021)
-    'xaurora_small_1440x721_2021': {
-        'path': '/projects/prjs1808/ewalt1/Xaurora/train/small-flow-map_600K_0.1-noise/forecast_20-SDE-steps/xaurora_forecasts.zarr',
+    # # Xaurora Small vs ERA5 (15d/2021)
+    # # DEPRECATED
+    # 'xaurora_small_1440x721_2021': {
+    #     'path': '/projects/prjs1808/ewalt1/Xaurora/train/small-flow-map_600K_0.1-noise/forecast_20-SDE-steps/xaurora_forecasts.zarr',
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # # Xaurora Small FM vs ERA5 (15d/2021) 
+    # # DEPRECATED
+    # 'xaurora_small_fm_1440x721_2021': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/16g/2026-02-10_15-11-33/forecast_2026-02-16_13-05-34/xaurora_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # Xaurora-Small-FlowMapSI vs ERA5 (5d/2022)
+    'xaurora_small_flowmap-si_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/xaurora_forecasts.zarr',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
-    # Xaurora Small FM vs ERA5 (15d/2021)
-    'xaurora_small_fm_1440x721_2021': {
-        'path': "/projects/prjs1808/ewalt1/Xaurora/train/16g/2026-02-10_15-11-33/forecast_2026-02-16_13-05-34/xaurora_forecasts.zarr",
+    # Xaurora-Small-FollmerSI vs ERA5 (5d/2022)
+    'xaurora_small_follmer-si_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-15/forecast_2026-03-14_13-28-24/xaurora_forecasts.zarr',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
@@ -200,7 +221,8 @@ probabilistic_prediction_configs = {
     # Xaurora vs ERA5 (15d/2022)
     'xaurora_1440x721_2022': {
         # TODO: update #  'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2022_15d_20-SDE-steps/xaurora_forecasts.zarr",
-        'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2026-03-11_18-15-50/xaurora_forecasts.zarr/',
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2026-03-11_18-15-50/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2026-03-11_18-15-50/xaurora_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
