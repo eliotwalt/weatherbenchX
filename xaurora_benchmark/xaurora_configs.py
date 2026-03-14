@@ -201,13 +201,13 @@ probabilistic_prediction_configs = {
     #     'levels': [250, 500, 700, 850]
     # },
     # Xaurora-Small-FlowMapSI vs ERA5 (5d/2022)
-    'xaurora_small_flowmap-si_1440x721_2022': {
+    'xaurora_small_flowmapsi_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/xaurora_forecasts.zarr',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
     # Xaurora-Small-FollmerSI vs ERA5 (5d/2022)
-    'xaurora_small_follmer-si_1440x721_2022': {
+    'xaurora_small_follmersi_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-15/forecast_2026-03-14_13-28-24/xaurora_forecasts.zarr',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
