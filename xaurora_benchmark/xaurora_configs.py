@@ -89,6 +89,7 @@ deterministic_prediction_configs = {
     # Aurora Small vs ERA5 (5d/2022)
     'aurora_small_pretrained_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/aurora-small-pretrained_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/aurora_small_pretrained_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
@@ -203,12 +204,14 @@ probabilistic_prediction_configs = {
     # Xaurora-Small-FlowMapSI vs ERA5 (5d/2022)
     'xaurora_small_flowmapsi_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/xaurora_small_flowmapsi_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
     # Xaurora-Small-FollmerSI vs ERA5 (5d/2022)
     'xaurora_small_follmersi_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-15/forecast_2026-03-14_13-28-24/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-15/forecast_2026-03-14_13-28-24/xaurora_small_follmersi_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
