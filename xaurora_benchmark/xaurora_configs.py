@@ -79,13 +79,55 @@ deterministic_prediction_configs = {
             'levels': [500, 700, 850],
         },
     ),
+    ### ****************************************************
+    ###        PRE-PATCH EXPERIMENTS (DEPRECATED)
+    ### ****************************************************
     # # Aurora Small vs ERA5 (15d/2021)
-    # # DEPRECATED
     # 'aurora_small_pretrained_1440x721_2021': {
     #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/small-flow-map_600K_0.1-noise/forecast_20-SDE-steps/aurora-small-pretrained_forecasts.zarr",
     #     'variables': standard_variables,
     #     'levels': [250, 500, 700, 850]
     # },
+    # Aurora PT vs ERA5 (15d/2021)
+    # 'aurora_pretrained_1440x721_2021': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2021_15d_20-SDE-steps/aurora-pretrained_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # Aurora PT vs ERA5 (15d/2022)
+    # 'aurora_pretrained_1440x721_2022': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2022_15d_20-SDE-steps/aurora-pretrained_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # Aurora FT (no LoRA) vs HRES-t0 (15d/2022)
+    # 'aurora_finetuned_no_lora_hres_init_1440x721_2022': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_hres_init_2022_15d_20-SDE-steps/aurora-finetuned_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # Aurora FT (no LoRA) vs HRES-t0 (15d/2022)
+    # 'aurora_finetuned_no_lora_hres_init_1440x721_2022': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_hres_init_2022_15d_20-SDE-steps/aurora-finetuned_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # Aurora FT (oper.) vs HRES-t0 (15d/2022)
+    # 'aurora_finetuned_hres_init_1440x721_2022': {
+    #     'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise_ft-hres-nowd/forecast_hres_init_2022_15d_20-SDE-steps/aurora-finetuned_forecasts.zarr',
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # # Aurora FT (oper.) (from aurora code) vs HRES-t0 (15d/2022)
+    # 'aurora_finetuned_from_aurora_hres_init_1440x721_2022': {
+    #     "path": "/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_hres_init_2022_15d/aurora-finetuned-from-aurora_forecasts.zarr",
+    #     "variables": standard_variables,
+    #     "levels": [250, 500, 700, 850]
+    # },
+    
+    ### ****************************************************
+    ###        POST-PATCH EXPERIMENTS (VALIDATED)
+    ### ****************************************************
     # Aurora Small vs ERA5 (5d/2022)
     'aurora_small_pretrained_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/aurora-small-pretrained_forecasts.zarr',
@@ -93,15 +135,8 @@ deterministic_prediction_configs = {
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
-    # Aurora PT vs ERA5 (15d/2021)
-    'aurora_pretrained_1440x721_2021': {
-        'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2021_15d_20-SDE-steps/aurora-pretrained_forecasts.zarr",
-        'variables': standard_variables,
-        'levels': [250, 500, 700, 850]
-    },
     # Aurora PT vs ERA5 (15d/2022)
     'aurora_pretrained_1440x721_2022': {
-        # old #  'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2022_15d_20-SDE-steps/aurora-pretrained_forecasts.zarr",
         'path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_xaurora/forecast_2026-03-10_20-46-40/aurora-pretrained_forecasts.zarr',
         'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_xaurora/forecast_2026-03-10_20-46-40/aurora_pretrained_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
@@ -109,7 +144,6 @@ deterministic_prediction_configs = {
     },
     # Aurora FT (no LoRA) vs HRES-t0 (15d/2022)
     'aurora_finetuned_no_lora_hres_init_1440x721_2022': {
-        # old # 'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_hres_init_2022_15d_20-SDE-steps/aurora-finetuned_forecasts.zarr",
         'path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_2026-03-11_14-13-58/aurora-finetuned-no-lora_forecasts.zarr',
         'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_2026-03-11_14-13-58/aurora_finetuned_no_lora_hres_init_vs_hres_t0_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
@@ -117,7 +151,6 @@ deterministic_prediction_configs = {
     },
     # Aurora FT (oper.) vs HRES-t0 (15d/2022)
     'aurora_finetuned_hres_init_1440x721_2022': {
-        # old # 'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise_ft-hres-nowd/forecast_hres_init_2022_15d_20-SDE-steps/aurora-finetuned_forecasts.zarr',
         'path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_2026-03-11_13-56-18/aurora-finetuned_forecasts.zarr',
         'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_2026-03-11_13-56-18/aurora_finetuned_hres_init_vs_hres_t0_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
@@ -125,7 +158,6 @@ deterministic_prediction_configs = {
     },
     # Aurora FT (oper.) (from aurora code) vs HRES-t0 (15d/2022)
     'aurora_finetuned_from_aurora_hres_init_1440x721_2022': {
-        # old # "path": "/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_hres_init_2022_15d/aurora-finetuned-from-aurora_forecasts.zarr",
         'path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_2026-03-11_11-28-34/aurora-finetuned-from-aurora_forecasts.zarr',
         'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/aurora_from_aurora/forecast_2026-03-11_11-28-34/aurora_finetuned_from_aurora_hres_init_vs_hres_t0_1440x721_2022-01-01_2022-12-31.nc',
         "variables": standard_variables,
@@ -187,20 +219,51 @@ probabilistic_prediction_configs = {
             'levels': [500, 700, 850],
         },
     ),
+    ### ****************************************************
+    ###        PRE-PATCH EXPERIMENTS (DEPRECATED)
+    ### ****************************************************
     # # Xaurora Small vs ERA5 (15d/2021)
-    # # DEPRECATED
     # 'xaurora_small_1440x721_2021': {
     #     'path': '/projects/prjs1808/ewalt1/Xaurora/train/small-flow-map_600K_0.1-noise/forecast_20-SDE-steps/xaurora_forecasts.zarr',
     #     'variables': standard_variables,
     #     'levels': [250, 500, 700, 850]
     # },
     # # Xaurora Small FM vs ERA5 (15d/2021) 
-    # # DEPRECATED
     # 'xaurora_small_fm_1440x721_2021': {
     #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/16g/2026-02-10_15-11-33/forecast_2026-02-16_13-05-34/xaurora_forecasts.zarr",
     #     'variables': standard_variables,
     #     'levels': [250, 500, 700, 850]
     # },
+    # Xaurora vs ERA5 (15d/2021)
+    # 'xaurora_1440x721_2021': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2021_15d_20-SDE-steps/xaurora_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # # Xaurora vs ERA5 (15d/2022)
+    # 'xaurora_1440x721_2022': {
+    #     # TODO: update #  'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2022_15d_20-SDE-steps/xaurora_forecasts.zarr",
+    #     'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2026-03-11_18-15-50/xaurora_forecasts.zarr',
+    #     'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2026-03-11_18-15-50/xaurora_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # # Xaurora FT vs HRES-t0 (zero-shot) (15d/2022)
+    # 'xaurora_zero_shot_hres_init_1440x721_2022': {
+    #     'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_hres_init_2022_15d_20-SDE-steps/xaurora_forecasts.zarr",
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    # # Xaurora FT vs HRES-t0 (15d/2022)
+    # 'xaurora_finetuned_hres_init_1440x721_2022': {
+    #     'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise_ft-hres-nowd/forecast_hres_init_2022_15d_20-SDE-steps/xaurora_forecasts.zarr',
+    #     'variables': standard_variables,
+    #     'levels': [250, 500, 700, 850]
+    # },
+    
+    ### ****************************************************
+    ###                  SI ABLATIONS
+    ### ****************************************************
     # Xaurora-Small-FlowMapSI vs ERA5 (5d/2022)
     'xaurora_small_flowmapsi_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-14_11-29-43/xaurora_forecasts.zarr',
@@ -215,32 +278,38 @@ probabilistic_prediction_configs = {
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
-    # Xaurora vs ERA5 (15d/2021)
-    'xaurora_1440x721_2021': {
-        'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2021_15d_20-SDE-steps/xaurora_forecasts.zarr",
+    
+    ### ****************************************************
+    ###               GENERATIVE ABLATIONS
+    ### ****************************************************
+    # Xaurora-Small-FlowMatching vs ERA5 (5d/2022)
+    'xaurora_small_flowmatching_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_18-46-26/forecast_2026-03-16_23-25-31/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_18-46-26/forecast_2026-03-16_23-25-31/xaurora_small_flowmatching_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
-    # Xaurora vs ERA5 (15d/2022)
-    'xaurora_1440x721_2022': {
-        # TODO: update #  'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2022_15d_20-SDE-steps/xaurora_forecasts.zarr",
-        'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2026-03-11_18-15-50/xaurora_forecasts.zarr',
-        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_2026-03-11_18-15-50/xaurora_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+    # Xaurora-Small-DDPM vs ERA5 (5d/2022)
+    # TBD
+    
+    ### ****************************************************
+    ###                 NOISE ABLATIONS
+    ### ****************************************************
+    # Xaurora-Small-FlowMapSI-0.25 vs ERA5 (5d/2022)
+    'xaurora_small_flowmapsi_025noise_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_14-41-31/forecast_2026-03-16_23-25-31/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_14-41-31/forecast_2026-03-16_23-25-31/xaurora_small_flowmapsi_025noise_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
-    # Xaurora FT vs HRES-t0 (zero-shot) (15d/2022)
-    'xaurora_zero_shot_hres_init_1440x721_2022': {
-        'path': "/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise/forecast_hres_init_2022_15d_20-SDE-steps/xaurora_forecasts.zarr",
+    # Xaurora-Small-FlowMapSI-0.5 vs ERA5 (5d/2022)
+    'xaurora_small_flowmapsi_05noise_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_15-14-32/forecast_2026-03-16_23-25-31/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_15-14-32/forecast_2026-03-16_23-25-31/xaurora_small_flowmapsi_05noise_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
-    # Xaurora FT vs HRES-t0 (15d/2022)
-    'xaurora_finetuned_hres_init_1440x721_2022': {
-        'path': '/projects/prjs1808/ewalt1/Xaurora/train/large-flow-map_600K_0.1-noise_ft-hres-nowd/forecast_hres_init_2022_15d_20-SDE-steps/xaurora_forecasts.zarr',
-        'variables': standard_variables,
-        'levels': [250, 500, 700, 850]
-    },
+
 }
 
 target_configs = {
