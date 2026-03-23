@@ -328,6 +328,20 @@ probabilistic_prediction_configs = {
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
+    # Xaurora-Small-FlowMapSI-gamma3-v0_0-v1_-3
+    'xaurora_small-flowmapsi_gamma3_v00_v1-3_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-35/forecast_2026-03-23_17-25-28/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-35/forecast_2026-03-23_17-25-28/xaurora_small_flowmapsi_gamma3_v00_v1-3_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+        'variables': standard_variables,
+        'levels': [250, 500, 700, 850]
+    },
+    # Xaurora-Small-FlowMapSI-gamma3-v0_3-v1_0
+    'xaurora_small-flowmapsi_gamma3_v03_v10_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-41/forecast_2026-03-23_17-31-18/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-41/forecast_2026-03-23_17-31-18/xaurora_small_flowmapsi_gamma3_v03_v10_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+        'variables': standard_variables,
+        'levels': [250, 500, 700, 850]
+    },
 }
 
 target_configs = {
