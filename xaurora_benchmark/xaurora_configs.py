@@ -314,6 +314,13 @@ probabilistic_prediction_configs = {
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
+    # Xaurora-Small-FlowMapSI-1.0 vs ERA5 (5d/2022)
+    'xaurora_small_flowmapsi_1.0noise_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-23_17-32-48/forecast_2026-03-24_16-00-54/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-23_17-32-48/forecast_2026-03-24_16-00-54/xaurora_small_flowmapsi_10noise_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+        'variables': standard_variables,
+        'levels': [250, 500, 700, 850]
+    },    
     # Xaurora-Small-FlowMapSI-infer0.25 vs ERA5 (5d/2022)
     'xaurora_small_flowmapsi_infer0.25_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-13_11-18-14/forecast_2026-03-17_12-06-14/xaurora_forecasts_infer0.25.zarr',
@@ -331,14 +338,14 @@ probabilistic_prediction_configs = {
     # Xaurora-Small-FlowMapSI-gamma3-v0_0-v1_-3
     'xaurora_small-flowmapsi_gamma3_v00_v1-3_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-35/forecast_2026-03-23_17-25-28/xaurora_forecasts.zarr',
-        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-35/forecast_2026-03-23_17-25-28/xaurora_small_flowmapsi_gamma3_v00_v1-3_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-35/forecast_2026-03-23_17-25-28/xaurora_small-flowmapsi_gamma3_v00_v1-3_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
     # Xaurora-Small-FlowMapSI-gamma3-v0_3-v1_0
     'xaurora_small-flowmapsi_gamma3_v03_v10_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-41/forecast_2026-03-23_17-31-18/xaurora_forecasts.zarr',
-        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-41/forecast_2026-03-23_17-31-18/xaurora_small_flowmapsi_gamma3_v03_v10_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-18_12-24-41/forecast_2026-03-23_17-31-18/xaurora_small-flowmapsi_gamma3_v03_v10_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
