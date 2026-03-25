@@ -300,6 +300,13 @@ probabilistic_prediction_configs = {
     ### ****************************************************
     ###                 NOISE ABLATIONS
     ### ****************************************************
+    # Xaurora-Small-FlowMapSI-0.2 vs ERA5 (5d/2022)
+    'xaurora_small_flowmapsi_02noise_1440x721_2022': {
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_15-14-32/forecast_2026-03-16_23-25-31/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_15-14-32/forecast_2026-03-16_23-25-31/xaurora_small_flowmapsi_02noise_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+        'variables': standard_variables,
+        'levels': [250, 500, 700, 850]
+    },
     # Xaurora-Small-FlowMapSI-0.25 vs ERA5 (5d/2022)
     'xaurora_small_flowmapsi_025noise_1440x721_2022': {
         'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_14-41-31/forecast_2026-03-16_23-25-31/xaurora_forecasts.zarr',
@@ -309,8 +316,8 @@ probabilistic_prediction_configs = {
     },
     # Xaurora-Small-FlowMapSI-0.5 vs ERA5 (5d/2022)
     'xaurora_small_flowmapsi_05noise_1440x721_2022': {
-        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_15-14-32/forecast_2026-03-16_23-25-31/xaurora_forecasts.zarr',
-        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-15_15-14-32/forecast_2026-03-16_23-25-31/xaurora_small_flowmapsi_05noise_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
+        'path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-24_18-04-36/forecast_2026-03-25_10-09-35/xaurora_forecasts.zarr',
+        'metrics_path': '/projects/prjs1808/ewalt1/Xaurora/train/8g/2026-03-24_18-04-36/forecast_2026-03-25_10-09-35/xaurora_small_flowmapsi_05noise_vs_era5_1440x721_2022-01-01_2022-12-31.nc',
         'variables': standard_variables,
         'levels': [250, 500, 700, 850]
     },
